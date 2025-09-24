@@ -375,21 +375,21 @@ class CI_Input {
 		$which = strtolower($which);
 
 		// First check if filter_var is available
-		if (is_callable('filter_var'))
+			if (is_callable('filter_var'))
 		{
-			switch ($which) {
+				switch ($which) {
 				case 'ipv4':
-					$flag = FILTER_FLAG_IPV4;
+						$flag = FILTER_FLAG_IPV4;
 					break;
 				case 'ipv6':
-					$flag = FILTER_FLAG_IPV6;
+						$flag = FILTER_FLAG_IPV6;
 					break;
 				default:
-					$flag = '';
+						$flag = 0; // must be int/array for PHP 8
 					break;
 			}
 
-			return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flag);
+				return (bool) filter_var($ip, FILTER_VALIDATE_IP, $flag);
 		}
 
 		if ($which !== 'ipv6' && $which !== 'ipv4')
@@ -696,7 +696,7 @@ class CI_Input {
 		   NOTE: In PHP 5.4 get_magic_quotes_gpc() will always return 0 and
 			 it will probably not exist in future versions at all.
 		*/
-		if ( ! is_php('5.4') && get_magic_quotes_gpc())
+		if ( ! is_php('5.4') && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
 		{
 			$str = stripslashes($str);
 		}
